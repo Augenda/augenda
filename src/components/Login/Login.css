@@ -1,0 +1,78 @@
+/* Container principal com imagem de fundo */
+.login-background {
+    background-image: url('../../assets/Background.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Alinha o container à direita */
+    padding-right: 300px; 
+  }
+  
+  /* Container do formulário */
+  .login-container {
+    background-color: white;
+    padding: 20px 40px;
+    border-radius: 10px;
+    border-style: dotted;
+    border-width: thick;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 25%;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+  }
+  
+  h2 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 90%;
+  padding: 10px;
+  margin: 6% 0;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+}
+
+.login-input:hover{
+    background-color: #b3b0b0;
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  margin: 5% 0;
+  cursor: pointer;
+}
+
+.login-remember label {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.login-button {
+  background-color: #f4a261; 
+  color: white;
+  width: 70%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15%;
+  cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #e76f51; 
+}
+  
