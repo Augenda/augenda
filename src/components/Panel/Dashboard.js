@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
+import Header from "../Templates/Header";
+import "./Dashboard.css";
 
 function Dashboard() {
   return (
-    <div>
-      <h1>Bem vindo ao Dashboard</h1>
+    <div className="dashboard">
+      <Header />
+      <div className="dashboard-content">
+      </div>
     </div>
   );
 }

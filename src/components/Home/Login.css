@@ -45,6 +45,19 @@
     background-color: #b3b0b0;
 }
 
+.password-input {
+  width: 90%;
+  padding: 10px;
+  margin: 6% 0;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+}
+
+.password-input:hover{
+    background-color: #b3b0b0;
+}
+
 .login-remember {
   display: flex;
   align-items: center;

@@ -1,0 +1,115 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #63b5e5;
+	color: white;
+	padding: 10px 20px;
+	height: 60px;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  background-color: transparent; /* Remove o fundo do botão */
+  border: none; /* Remove a borda */
+  cursor: pointer;
+  padding: 8px;
+  transition: width 0.3s ease; /* Transição suave para expandir */
+  overflow: hidden; /* Esconde o texto fora do botão inicialmente */
+  width: 40px; /* Largura inicial com apenas o ícone visível */
+}
+
+.logout-button:hover {
+  width: 100px; /* Expande a largura para exibir o texto */
+}
+
+.logout-icon {
+  width: 24px;
+  height: 24px;
+  transition: margin-right 0.3s ease; /* Suave no espaço ao lado do ícone */
+}
+
+.logout-text {
+  color: white;
+  font-weight: bold;
+  opacity: 0; /* Inicialmente invisível */
+  margin-left: 8px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease; /* Transição para aparecer suavemente */
+}
+
+/* Mostra o texto e ajusta a posição do ícone quando em hover */
+.logout-button:hover .logout-text {
+  opacity: 1;
+}
+
+.logout-icon {
+  width: 24px; 
+  height: 24px;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-pic {
+  width: 50px; 
+  height: 50px;
+  border-radius: 50%; /* Tornar a imagem redonda */
+  object-fit: cover; /* Ajustar a imagem para o tamanho sem distorcer */
+  transition: transform 0.3s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.3); /* Aumenta a imagem 10% no hover */
+  object-fit: cover;
+  }
+
+.greetings {
+  font-size: 16px;
+}
+
+.username {
+  font-size: 18px;
+	font-weight: bold;
+}
+
+.buttons {
+	display: flex;
+}
+
+.button-dash {
+  color: white;
+	text-decoration: none;
+	font-weight: bold;
+	display: inline-block; 
+	padding: 20px 20px; 
+	font-size: 18px;
+	border-radius: 5px;
+}
+
+.button-dash:hover {
+	background-color: #4a90d6;
+	border-radius: 5px;
+}
+
+.button-menu {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	display: inline-block; 
+	padding: 20px 20px; 
+	font-size: 18px;
+	border-radius: 5px;
+}
+
+.button-menu:hover {
+	background-color: #4a90d6;
+	border-radius: 5px;
+}
