@@ -7,6 +7,7 @@ function Login() {
 
 	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState(""); // Para exibir mensagens de erro
 
 	const handleLoginChange = (e) => setLogin(e.target.value);
 	const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -26,20 +27,37 @@ function Login() {
 		}
 	}, []);
 
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
-		navigate("/dashboard");
-		if (remember) {
-			localStorage.setItem("login", login);
-			localStorage.setItem("password", password);
-			localStorage.setItem("remember", "true");
-		} else {
-			// Limpar dados do localStorage caso a opção "lembrar" não seja marcada
-			localStorage.removeItem("login");
-			localStorage.removeItem("password");
-			localStorage.removeItem("remember");
+		try {
+			const response = await fetch("http://localhost:5000/api/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ username: login, password }),
+			});
+	
+			const data = await response.json();
+	
+			if (response.ok) {
+				if (remember) {
+					localStorage.setItem("login", login);
+					localStorage.setItem("password", password);
+					localStorage.setItem("remember", "true");
+				} else {
+					localStorage.removeItem("login");
+					localStorage.removeItem("password");
+					localStorage.removeItem("remember");
+				}
+				navigate("/dashboard");
+			} else {
+				// Ajuste aqui: acessar o campo 'error' corretamente
+				setErrorMessage(data.error || "Erro ao fazer login");
+			}
+		} catch (error) {
+			setErrorMessage("Erro ao conectar ao servidor");
 		}
 	};
+	
 
 	const handleCheckboxChange = () => {
 		setRemember(!remember);
@@ -49,36 +67,42 @@ function Login() {
 		<div className="login-background">
 			<div className="login-container">
 				<h2>LOGIN</h2>
-				<form onSubmit={handleLogin}></form>
-				<input
-					type="text"
-					placeholder="Usuário"
-					className="login-input"
-					value={login}
-					onChange={handleLoginChange}
-				/>
+				{/* Alterei o formulário para usar o onSubmit para chamar handleLogin */}
+				<form onSubmit={handleLogin}>
+					<input
+						type="text"
+						placeholder="Usuário"
+						className="login-input"
+						value={login}
+						onChange={handleLoginChange}
+					/>
 
-				<input
-					type="password"
-					placeholder="Senha"
-					className="password-input"
-					value={password}
-					onChange={handlePasswordChange}
-				/>
+					<input
+						type="password"
+						placeholder="Senha"
+						className="password-input"
+						value={password}
+						onChange={handlePasswordChange}
+					/>
 
-				<div className="login-remember">
-					<label>
-						<input
-							type="checkbox"
-							checked={remember}
-							onChange={handleCheckboxChange}
-						/>
-						Lembrar-me
-					</label>
-				</div>
-				<button className="login-button" onClick={handleLogin}>
-					ENTRAR
-				</button>
+					<div className="login-remember">
+						<label>
+							<input
+								type="checkbox"
+								checked={remember}
+								onChange={handleCheckboxChange}
+							/>
+							Lembrar-me
+						</label>
+					</div>
+					{/* Exibir mensagem de erro */}
+					{errorMessage && <p className="error-message">{errorMessage}</p>}
+					
+					{/* O botão agora tem o tipo "submit" */}
+					<button className="login-button" type="submit">
+						ENTRAR
+					</button>
+				</form>
 			</div>
 		</div>
 	);
