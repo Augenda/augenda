@@ -1,30 +1,19 @@
 import React from "react";
 import "./Forms.css";
-import { useNavigate } from 'react-router-dom';
 
-
-const Forms = () => {
-	const navigate = useNavigate();
-
-	 const handleAddInfo = () => {
-	 	navigate("/addworker");
-	 };
-
+const Forms = ({ handleAddInfo, handleSearchInfo, handleDeleteInfo }) => {
 	return (
 		<div className="form-content">
 			<div className="form-container">
-				<button className="form-buttons" onClick={handleAddInfo}
-                >
+				<button className="form-buttons" onClick={handleAddInfo}>
 					<img src={require("../../assets/But_Add.png")} alt="Add_Info" />
 					<p>ADICIONAR</p>
 				</button>
-                <button className="form-buttons" //onClick={handleSearchInfo}
-                >
+				<button className="form-buttons" onClick={handleSearchInfo}>
 					<img src={require("../../assets/But_Search.png")} alt="Search_Info" />
 					<p>PESQUISAR</p>
 				</button>
-                <button className="form-buttons" //onClick={handleDeleteInfo}
-                >
+				<button className="form-buttons" onClick={handleDeleteInfo}>
 					<img src={require("../../assets/But_Delete.png")} alt="Delete_Info" />
 					<p>EXCLUIR</p>
 				</button>
@@ -32,6 +21,5 @@ const Forms = () => {
 		</div>
 	);
 };
-
 
 export default Forms;
