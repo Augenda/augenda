@@ -35,9 +35,9 @@ function Login() {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username: login, password }),
 			});
-	
+
 			const data = await response.json();
-	
+
 			if (response.ok) {
 				if (remember) {
 					localStorage.setItem("login", login);
@@ -50,14 +50,12 @@ function Login() {
 				}
 				navigate("/dashboard");
 			} else {
-				// Ajuste aqui: acessar o campo 'error' corretamente
 				setErrorMessage(data.error || "Erro ao fazer login");
 			}
 		} catch (error) {
 			setErrorMessage("Erro ao conectar ao servidor");
 		}
 	};
-	
 
 	const handleCheckboxChange = () => {
 		setRemember(!remember);
@@ -97,11 +95,16 @@ function Login() {
 					</div>
 					{/* Exibir mensagem de erro */}
 					{errorMessage && <p className="error-message">{errorMessage}</p>}
-					
+
 					{/* O botão agora tem o tipo "submit" */}
-					<button className="login-button" type="submit">
+					{/* <button className="login-button" type="submit">
 						ENTRAR
-					</button>
+					</button> */}
+
+					<a className="login-button" href="/dashboard">
+						ENTRAR
+					</a>
+					
 				</form>
 			</div>
 		</div>

@@ -1,0 +1,70 @@
+.dashboard-content{
+    text-align: center;
+}
+
+.title{
+    margin-top: 2%;
+    color: chocolate;
+}
+
+.dashboard-container {
+    margin-top: 3%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 3%;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .highlights {
+    background-color: #003f66; /* Azul para os cards de destaque */
+    color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .highlights:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); 
+  }
+  
+  .details {
+    background-color: #d67f2d; /* Laranja para os detalhes */
+    color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .details:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); 
+  }
+  
+  .card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+  
+  .card p {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  .card ol {
+    padding-left: 20px;
+    text-align: left;
+  }
+  
+  .dashboard-container .highlights:nth-child(2) {
+    grid-column: span 2; /* Card central maior */
+  }
+  

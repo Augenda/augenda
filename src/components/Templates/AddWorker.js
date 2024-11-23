@@ -1,0 +1,158 @@
+import React, { useState } from "react";
+import "./AddWorker.css";
+import { useNavigate } from 'react-router-dom';
+
+const AddWorker = () => {
+	const navigate = useNavigate();
+	const handleGoback = () => {
+		navigate("/workers");
+	};
+	const [formData, setFormData] = useState({
+		name: "",
+		username: "",
+		password: "",
+		role: "user", // Valor padrão
+	});
+	const [photo, setPhoto] = useState(null); // Estado para armazenar a foto
+
+	// Função para lidar com alterações nos campos do formulário
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
+
+	// Função para lidar com o upload de foto
+	const handlePhotoChange = (event) => {
+		const file = event.target.files[0]; // Obtém o arquivo selecionado
+		setPhoto(file);
+	};
+
+	// Função para lidar com o envio do formulário
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		const formDataToSend = new FormData(); // Usa FormData para incluir o arquivo no envio
+
+		// Adiciona os dados do formulário
+		for (let key in formData) {
+			formDataToSend.append(key, formData[key]);
+		}
+
+		// Adiciona a foto
+		if (photo) {
+			formDataToSend.append("photo", photo);
+		}
+
+		// Exemplo de envio dos dados para o servidor !!!!!!!!! ATENÇÃO EDUARDO !!!!!!!
+		// fetch("/api/employees", {
+		// 	method: "POST",
+		// 	body: formDataToSend,
+		// })
+		// 	.then((response) => {
+		// 		if (response.ok) {
+		// 			alert("Funcionário registrado com sucesso!");
+		// 		} else {
+		// 			alert("Erro ao registrar o funcionário!");
+		// 		}
+		// 	})
+		// 	.catch((error) => console.error("Erro:", error));
+		
+	};
+
+	return (
+		
+		<div className="add-content">
+			<button className="form-buttons" onClick={handleGoback}>
+				<img src={require("../../assets/But_LogOut.png")} alt="But_Goback" />
+				<p>VOLTAR</p>
+			</button>
+			<h2 className="title">Registro de Funcionário</h2>
+			<form onSubmit={handleSubmit} encType="multipart/form-data">
+				{/* Campo Nome */}
+				<div>
+					<label htmlFor="name">Nome:</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						value={formData.name}
+						onChange={handleChange}
+						required
+					/>
+				</div>
+
+				{/* Campo Username */}
+				<div>
+					<label htmlFor="username">Usuário:</label>
+					<input
+						type="text"
+						id="username"
+						name="username"
+						value={formData.username}
+						onChange={handleChange}
+						required
+					/>
+				</div>
+
+				{/* Campo Password */}
+				<div>
+					<label htmlFor="password">Senha:</label>
+					<input
+						type="password"
+						id="password"
+						name="password"
+						value={formData.password}
+						onChange={handleChange}
+						required
+					/>
+				</div>
+
+				{/* Campo Role */}
+				<div>
+					<label htmlFor="role">Função:</label>
+					<select
+						id="role"
+						name="role"
+						value={formData.role}
+						onChange={handleChange}
+						required
+					>
+						<option value="admin">ADMINISTRADOR</option>
+						<option value="user">USUÁRIO</option>
+					</select>
+				</div>
+
+				{/* Campo Foto */}
+				<div>
+					<label htmlFor="photo">Foto:</label>
+					<input
+						type="file"
+						id="photo"
+						name="photo"
+						accept="image/*"
+						onChange={handlePhotoChange}
+					/>
+				</div>
+
+				{photo && (
+					<div>
+						<img
+							src={URL.createObjectURL(photo)}
+							alt="Foto do Funcionário"
+							style={{ width: "100px", height: "100px", objectFit: "cover" }}
+						/>
+					</div>
+				)}
+
+				{/* Botão de Enviar */}
+				<div>
+					<button type="submit">GRAVAR</button>
+				</div>
+			</form>
+		</div>
+	);
+};
+
+export default AddWorker;

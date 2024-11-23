@@ -11,11 +11,7 @@ function Header() {
         navigate('/'); 
       };
   const saudacaoPorHorario = () => {
-    const horaBrasilia = new Date().toLocaleString("pt-BR", {
-      timeZone: "America/Sao_Paulo",
-    });
-
-    const hora = new Date(horaBrasilia).getHours();
+    const hora = new Date().getHours();  
     if (hora >= 6 && hora < 12) {
       return "Bom dia,";
     } else if (hora >= 12 && hora < 18) {

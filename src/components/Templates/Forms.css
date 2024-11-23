@@ -1,0 +1,25 @@
+.form-container {
+	display: flex;
+	justify-content: center; /* Alinha os botões horizontalmente ao centro */
+	align-items: center; /* Alinha verticalmente (se necessário) */
+	gap: 5px; /* Espaço entre os botões */
+}
+
+.form-buttons {
+	border: none;
+	outline: none;
+	background: none;
+	cursor: pointer;
+	display: flex; /* Para alinhar o texto e a imagem dentro do botão */
+	flex-direction: column; /* Imagem em cima, texto embaixo */
+	align-items: center; /* Centraliza conteúdo do botão */
+	padding: 3px; /* Ajuste do espaçamento interno */
+	align-items: center;
+	border: none;
+	cursor: pointer;
+}
+
+.form-buttons img{
+	width: 50px; /* Ajuste do tamanho da imagem */
+	height: 50px; /* Ajuste do tamanho da imagem */
+}

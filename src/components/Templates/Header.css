@@ -24,7 +24,7 @@
 }
 
 .logout-button:hover {
-  width: 100px; /* Expande a largura para exibir o texto */
+  width: 100px;
 }
 
 .logout-icon {
@@ -53,6 +53,7 @@
 }
 
 .profile-container {
+  margin-left: 10%;
   display: flex;
   align-items: center;
   gap: 10px;

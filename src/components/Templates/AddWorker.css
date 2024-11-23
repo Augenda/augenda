@@ -1,0 +1,35 @@
+.add-content{
+    text-align: center;
+}
+
+.title{
+    margin-top: 2%;
+    color: chocolate;
+}
+
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  form div {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  input, select, button {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  
