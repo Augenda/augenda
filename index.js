@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require("multer");
+const path = require("path");
 
 const app = express();
 app.use(cors());
@@ -20,17 +22,42 @@ const db = mysql.createPool({
     database: 'augenda',
 });
 
-// Rota para cadastrar um novo usuário
-app.post('/api/register', async (req, res) => {
+// Servir arquivos estáticos da pasta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Configuração do multer para salvar arquivos localmente
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Diretório onde as imagens serão salvas
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    },
+});
+
+const upload = multer({ storage });
+
+// Rota para adicionar funcionário
+app.post("/api/add-worker", upload.single("photo"), (req, res) => {
     const { name, username, password, role } = req.body;
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const sql = 'INSERT INTO user (name, username, password, role) VALUES (?, ?, ?, ?)';
-        await db.query(sql, [name, username, hashedPassword, role]);
-        res.status(200).json({ message: 'Usuário cadastrado com sucesso!' });
-    } catch (err) {
-        res.status(500).json({ error: 'Erro ao cadastrar o usuário' });
-    }
+    const photoPath = req.file ? req.file.path : null; // Caminho da imagem salva
+
+    // Criptografar a senha antes de salvar no banco
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+        if (err) {
+            return res.status(500).json({ error: "Erro ao criptografar a senha" });
+        }
+
+        const sql = "INSERT INTO User (name, username, password, role, profile_image) VALUES (?, ?, ?, ?, ?)";
+        db.query(sql, [name, username, hashedPassword, role, photoPath], (err, result) => {
+            if (err) {
+                console.error("Erro ao salvar no banco:", err);
+                return res.status(500).json({ error: "Erro ao adicionar funcionário" });
+            }
+            res.status(200).json({ message: "Funcionário adicionado com sucesso!" });
+        });
+    });
 });
 
 // Rota para autenticação de login
@@ -43,16 +70,31 @@ app.post('/api/login', async (req, res) => {
         }
         const user = results[0];
         const passwordMatch = await bcrypt.compare(password, user.password);
-    if (passwordMatch) {
-    const token = jwt.sign({ user_id: user.user_id, username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login bem-sucedido!', token });
+        
+        if (passwordMatch) {
+            let profileImage = null;
+            // Verifica se a imagem do perfil existe como BLOB
+            if (user.profile_image) {
+                // Converte o BLOB para Base64 (assumindo que o BLOB é uma imagem JPEG)
+                profileImage = `data:image/jpeg;base64,${user.profile_image.toString('base64')}`;
+            }
+
+            const token = jwt.sign({ user_id: user.user_id, username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+            res.status(200).json({
+                message: 'Login bem-sucedido!',
+                token,
+                name: user.name,
+                profileImage: profileImage, // Envia a imagem em Base64
+            });
         } else {
-    res.status(401).json({ error: 'Senha incorreta' });
-    }
+            res.status(401).json({ error: 'Senha incorreta' });
+        }
     } catch (err) {
+        console.error("Erro no servidor:", err);
         res.status(500).json({ error: 'Erro no servidor' });
     }
 });
+
 
 const PORT = 5000;
 app.listen(PORT, () => {

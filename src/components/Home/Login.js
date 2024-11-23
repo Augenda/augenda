@@ -39,16 +39,11 @@ function Login() {
 			const data = await response.json();
 
 			if (response.ok) {
-				if (remember) {
-					localStorage.setItem("login", login);
-					localStorage.setItem("password", password);
-					localStorage.setItem("remember", "true");
-				} else {
-					localStorage.removeItem("login");
-					localStorage.removeItem("password");
-					localStorage.removeItem("remember");
-				}
-				navigate("/dashboard");
+				// Armazena o token, nome e imagem no LocalStorage
+				localStorage.setItem('token', data.token);
+				localStorage.setItem('username', data.name);
+				localStorage.setItem('profileImage', data.profileImage); // Caminho ou URL da imagem
+				navigate('/dashboard');
 			} else {
 				setErrorMessage(data.error || "Erro ao fazer login");
 			}
@@ -97,9 +92,9 @@ function Login() {
 					{errorMessage && <p className="error-message">{errorMessage}</p>}
 
 					{/* O botão agora tem o tipo "submit" */}
-					{/* <button className="login-button" type="submit">
+					<button className="login-button" type="submit">
 						ENTRAR
-					</button> */}
+					</button>
 
 					<a className="login-button" href="/dashboard">
 						ENTRAR

@@ -31,7 +31,7 @@ const AddWorker = () => {
 	};
 
 	// Função para lidar com o envio do formulário
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const formDataToSend = new FormData(); // Usa FormData para incluir o arquivo no envio
 
@@ -44,20 +44,24 @@ const AddWorker = () => {
 		if (photo) {
 			formDataToSend.append("photo", photo);
 		}
-
-		// Exemplo de envio dos dados para o servidor !!!!!!!!! ATENÇÃO EDUARDO !!!!!!!
-		// fetch("/api/employees", {
-		// 	method: "POST",
-		// 	body: formDataToSend,
-		// })
-		// 	.then((response) => {
-		// 		if (response.ok) {
-		// 			alert("Funcionário registrado com sucesso!");
-		// 		} else {
-		// 			alert("Erro ao registrar o funcionário!");
-		// 		}
-		// 	})
-		// 	.catch((error) => console.error("Erro:", error));
+		try {
+			// Faz a requisição ao backend
+			const response = await fetch("http://localhost:5000/api/add-worker", {
+				method: "POST",
+				body: formDataToSend,
+			});
+	
+			const data = await response.json();
+			if (response.ok) {
+				alert("Funcionário adicionado com sucesso!");
+				navigate("/workers"); // Redireciona para a página de funcionários
+			} else {
+				alert(data.error || "Erro ao adicionar funcionário.");
+			}
+		} catch (error) {
+			console.error("Erro ao enviar dados:", error);
+			alert("Erro ao conectar ao servidor.");
+		}
 		
 	};
 
@@ -156,3 +160,17 @@ const AddWorker = () => {
 };
 
 export default AddWorker;
+
+		// Exemplo de envio dos dados para o servidor !!!!!!!!! ATENÇÃO EDUARDO !!!!!!!
+		// fetch("/api/employees", {
+		// 	method: "POST",
+		// 	body: formDataToSend,
+		// })
+		// 	.then((response) => {
+		// 		if (response.ok) {
+		// 			alert("Funcionário registrado com sucesso!");
+		// 		} else {
+		// 			alert("Erro ao registrar o funcionário!");
+		// 		}
+		// 	})
+		// 	.catch((error) => console.error("Erro:", error)); 
