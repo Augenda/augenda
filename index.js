@@ -28,7 +28,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Configuração do multer para salvar arquivos localmente
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Diretório onde as imagens serão salvas
+        cb(null, "./uploads"); // Diretório onde as imagens serão salvas
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -58,6 +58,27 @@ app.post("/api/add-worker", upload.single("photo"), (req, res) => {
             res.status(200).json({ message: "Funcionário adicionado com sucesso!" });
         });
     });
+});
+
+// Endpoint para adicionar um pet
+app.post("/api/add-pet", upload.single("photo"), async (req, res) => {
+    try {
+        const { name, breed, age, idclient, type } = req.body;
+        const photoPath = req.file ? req.file.filename : null; // Caminho do arquivo
+
+        // Insere os dados no banco de dados
+        const query = `
+            INSERT INTO pet (name, breed, age, id_client, type, pet_photo)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        const values = [name, breed, age, idclient, type, photoPath];
+        await db.query(query, values);
+
+        res.status(201).json({ message: "Pet cadastrado com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao cadastrar o pet:", error);
+        res.status(500).json({ error: "Erro ao cadastrar o pet." });
+    }
 });
 
 // Rota para autenticação de login

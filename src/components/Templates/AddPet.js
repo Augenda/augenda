@@ -47,7 +47,7 @@ const AddPet = () => {
 		}
 		try {
 			// Faz a requisição ao backend
-			const response = await fetch("http://localhost:5000/api/add-worker", {
+			const response = await fetch("http://localhost:5000/api/add-pet", {
 				method: "POST",
 				body: formDataToSend,
 			});
