@@ -8,9 +8,21 @@ const multer = require("multer");
 const path = require("path");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Permitir o frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true,
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Adicionado
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 const SECRET_KEY = "your_secret_key"; // Chave secreta para JWT
 
@@ -22,18 +34,19 @@ const db = mysql.createPool({
     database: 'augenda',
 });
 
-// Servir arquivos estáticos da pasta uploads
+// Configura a pasta 'uploads' como estática
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Configuração do multer para salvar arquivos localmente
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./uploads"); // Diretório onde as imagens serão salvas
+        cb(null, 'uploads/'); // Diretório onde as imagens serão salvas
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    },
+        const ext = path.extname(file.originalname); // Obtém a extensão do arquivo
+        const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${ext}`; // Nome único com timestamp
+        cb(null, fileName); // Define o nome do arquivo gerado
+      }
 });
 
 const upload = multer({ storage });
@@ -41,7 +54,7 @@ const upload = multer({ storage });
 // Rota para adicionar funcionário
 app.post("/api/add-worker", upload.single("photo"), (req, res) => {
     const { name, username, password, role } = req.body;
-    const photoPath = req.file ? req.file.path : null; // Caminho da imagem salva
+    const photoPath = req.file ? req.file.path : null;  // Caminho correto
 
     // Criptografar a senha antes de salvar no banco
     bcrypt.hash(password, 10, (err, hashedPassword) => {
@@ -84,37 +97,48 @@ app.post("/api/add-pet", upload.single("photo"), async (req, res) => {
 // Rota para autenticação de login
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
+
     try {
+        // Busca o usuário pelo username
         const [results] = await db.query('SELECT * FROM user WHERE username = ?', [username]);
+
         if (results.length === 0) {
             return res.status(401).json({ error: 'Usuário não encontrado' });
         }
+
         const user = results[0];
         const passwordMatch = await bcrypt.compare(password, user.password);
-        
+
         if (passwordMatch) {
+            // Monta o caminho completo para a imagem de perfil, se existir
             let profileImage = null;
-            // Verifica se a imagem do perfil existe como BLOB
             if (user.profile_image) {
-                // Converte o BLOB para Base64 (assumindo que o BLOB é uma imagem JPEG)
-                profileImage = `data:image/jpeg;base64,${user.profile_image.toString('base64')}`;
+                profileImage = `/uploads/${user.profile_image}`; // Supondo que o campo profile_image contém apenas o nome do arquivo
             }
 
-            const token = jwt.sign({ user_id: user.user_id, username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+            // Gera o token JWT
+            const token = jwt.sign(
+                { user_id: user.user_id, username: user.username, role: user.role },
+                SECRET_KEY,
+                { expiresIn: '1h' }
+            );
+
+            // Retorna os dados do usuário
             res.status(200).json({
                 message: 'Login bem-sucedido!',
                 token,
                 name: user.name,
-                profileImage: profileImage, // Envia a imagem em Base64
+                profileImage, // Envia o caminho da imagem como URL relativa
             });
         } else {
             res.status(401).json({ error: 'Senha incorreta' });
         }
     } catch (err) {
-        console.error("Erro no servidor:", err);
+        console.error('Erro no servidor:', err);
         res.status(500).json({ error: 'Erro no servidor' });
     }
 });
+
 
 
 const PORT = 5000;

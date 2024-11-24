@@ -11,7 +11,7 @@ const Header = () => {
     };
 
     const username = localStorage.getItem('username'); // Busca o nome do usuário
-    const profileImage = localStorage.getItem('profileImage'); // Base64 armazenado no LocalStorage
+    const profileImage = localStorage.getItem('profileImage'); 
 
     const saudacaoPorHorario = () => {
         const hora = new Date().getHours();  
@@ -39,7 +39,7 @@ const Header = () => {
               <div className="profile">
                   {profileImage ? (
                       <img
-                          src={profileImage} // Adiciona o prefixo Base64
+                          src={profileImage ? `http://localhost:5000/${profileImage.replace(/^\/?uploads\//, '')}` : 'default-avatar.png'}
                           alt="Foto de Perfil"
                           className="profile-pic"
                       />
