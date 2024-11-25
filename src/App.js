@@ -10,6 +10,7 @@ import Customers from './components/Screens/Customers';
 import Bookings from './components/Screens/Bookings';
 import AddWorker from './components/Templates/AddWorker';
 import AddPet from './components/Templates/AddPet';
+import AddCustomer from './components/Templates/AddCustomer';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/pets"  element={<Pets />} />
         <Route path="/addworker"  element={<AddWorker />} />
         <Route path="/addpet"  element={<AddPet />} />
+        <Route path="/addcustomer"  element={<AddCustomer />} />
       </Routes>
     </Router>
   );
