@@ -7,10 +7,12 @@ import Workers from './components/Screens/Workers';
 import Services from './components/Screens/Services';
 import Pets from './components/Screens/Pets';
 import Customers from './components/Screens/Customers';
-import Bookings from './components/Screens/Bookings';
+import Appointments from './components/Screens/Appointments';
 import AddWorker from './components/Templates/AddWorker';
 import AddPet from './components/Templates/AddPet';
 import AddCustomer from './components/Templates/AddCustomer';
+import AddService from './components/Templates/AddService';
+import AddAppointment from './components/Templates/AddAppointment';
 
 
 function App() {
@@ -20,7 +22,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/menu"  element={<Menu />} />
-        <Route path="/bookings"  element={<Bookings />} />
+        <Route path="/appointments"  element={<Appointments />} />
         <Route path="/customers"  element={<Customers />} />
         <Route path="/workers"  element={<Workers />} />
         <Route path="/services"  element={<Services />} />
@@ -28,6 +30,8 @@ function App() {
         <Route path="/addworker"  element={<AddWorker />} />
         <Route path="/addpet"  element={<AddPet />} />
         <Route path="/addcustomer"  element={<AddCustomer />} />
+        <Route path="/addservice"  element={<AddService />} />
+        <Route path="/addappointment"  element={<AddAppointment />} />
       </Routes>
     </Router>
   );

@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 export const Menu = () => {
 	const navigate = useNavigate();
 
-	const handleBookings = () => {
+	const handleAppointments = () => {
 		// Redireciona para a página desejada sem validação
-		navigate("/bookings");
+		navigate("/appointments");
 	};
     const handleServices = () => {
 		// Redireciona para a página desejada sem validação
@@ -32,8 +32,8 @@ export const Menu = () => {
 			<Header />
 			<h1 className="title">MENU</h1>
 			<div className="menu-container">
-				<button className="menu-item" onClick={handleBookings}>
-					<img src={require("../../assets/But_Bookings.png")} alt="Bookings" />
+				<button className="menu-item" onClick={handleAppointments}>
+					<img src={require("../../assets/But_Bookings.png")} alt="Appointments" />
 					<p>AGENDAMENTOS</p>
 				</button>
                 <button className="menu-item2" onClick={handleServices}>

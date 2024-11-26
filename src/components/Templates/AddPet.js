@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddWorker.css";
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,24 @@ const AddPet = () => {
 		type: "dog", // Valor padrão
 	});
 	const [photo, setPhoto] = useState(null); // Estado para armazenar a foto
+	const [clients, setClients] = useState([]); // Estado para armazenar os clientes
+
+	useEffect(() => {
+		const fetchClients = async () => {
+			try {
+				const response = await fetch("http://localhost:5000/api/customers"); // Substitua pela rota correta da API
+				if (response.ok) {
+					const data = await response.json();
+					setClients(data); // Define os serviços no estado
+				} else {
+					console.error("Erro ao buscar clientes:", response.statusText);
+				}
+			} catch (error) {
+				console.error("Erro na conexão com a API:", error);
+			}
+		};
+		fetchClients();
+	}, []);
 
 	// Função para lidar com alterações nos campos do formulário
 	const handleChange = (event) => {
@@ -101,8 +119,28 @@ const AddPet = () => {
 					/>
 				</div>
 
-				{/* Campo Cliente */}
 				<div>
+					<label htmlFor="idclient">Dono(Cliente):</label>
+					<select
+						id="idclient"
+						name="idclient"
+						value={formData.idclient}
+						onChange={handleChange}
+						required
+					>
+						<option value="" disabled>
+							Selecione um cliente
+						</option>
+						{clients.map((client) => (
+							<option key={client.id} value={client.id}>
+								{client.name}
+							</option>
+						))}
+					</select>
+				</div>
+
+				{/* Campo Cliente */}
+				{/* <div>
 					<label htmlFor="idclient">Dono(Cliente):</label>
 					<input
 						type="number"
@@ -113,7 +151,7 @@ const AddPet = () => {
 						onChange={handleChange}
 						required
 					/>
-				</div>
+				</div> */}
 
 				{/* Campo Tipo */}
 				<div>
