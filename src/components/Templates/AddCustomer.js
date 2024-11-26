@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import InputMask from "react-input-mask";
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns"; //Import que permite que a data seja formatada corretamente antes de ser inserida no banco de dados!!!
 
 const AddCustomer = () => {
 	const navigate = useNavigate();
@@ -44,8 +45,9 @@ const AddCustomer = () => {
 	};
 
     const handleDateChange = (date) => {
-        setFormData({ ...formData, birth_date: date });
-      };
+		const formattedDate = format(date, "yyyy-MM-dd"); // Formata para o formato que o MySQL aceita
+		setFormData({ ...formData, birth_date: formattedDate });
+	  };
 
 	//FUNÇÃO PRA PEGAR A LISTA DE CIDADES
 	useEffect(() => {
@@ -84,30 +86,31 @@ const AddCustomer = () => {
 	// Função para lidar com o envio do formulário
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const formDataToSend = new FormData(); // Usa FormData para incluir o arquivo no envio
-
-		// Adiciona os dados do formulário
+	
+		const formDataToSend = new FormData();
+	
+		// Adiciona dados do formulário
 		for (let key in formData) {
 			formDataToSend.append(key, formData[key]);
 		}
-
-		// Adiciona a foto
+	
+		// Adiciona foto, se houver
 		if (photo) {
 			formDataToSend.append("photo", photo);
 		}
+	
 		try {
-			// Faz a requisição ao backend
 			const response = await fetch("http://localhost:5000/api/add-customer", {
 				method: "POST",
 				body: formDataToSend,
 			});
-
+	
 			const data = await response.json();
 			if (response.ok) {
-				alert("Funcionário adicionado com sucesso!");
-				navigate("/customers"); // Redireciona para a página de funcionários
+				alert("Cliente adicionado com sucesso!");
+				navigate("/customers"); // Redireciona para a lista de clientes
 			} else {
-				alert(data.error || "Erro ao adicionar funcionário.");
+				alert(data.error || "Erro ao adicionar cliente.");
 			}
 		} catch (error) {
 			console.error("Erro ao enviar dados:", error);

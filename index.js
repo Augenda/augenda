@@ -73,6 +73,55 @@ app.post("/api/add-worker", upload.single("photo"), (req, res) => {
     });
 });
 
+// Rota para adicionar cliente
+app.post("/api/add-customer", upload.single("photo"), async (req, res) => {
+    try {
+        const {
+            name,
+            phone,
+            cpf,
+            birth_date,  // Agora pega a data diretamente
+            status,
+            adress: address,
+            ref,
+            city,
+            state
+        } = req.body;
+
+        const photoPath = req.file ? req.file.filename : null; // Caminho do arquivo
+
+        // Formatar a data para o formato YYYY-MM-DD
+        const formattedDate = new Date(birth_date).toISOString().split('T')[0]; // Converte a data para o formato correto
+
+        // Insere os dados no banco de dados
+        const query = `
+            INSERT INTO client (name, phone, cpf, birth_date, status, address, ref, city, state, client_photo) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        const values = [
+            name,              // Nome
+            phone,             // Telefone
+            cpf,               // CPF
+            formattedDate,     // Data de nascimento formatada
+            status,            // Status
+            address,           // Endereço
+            ref,               // Referência
+            city,              // Cidade
+            state,             // Estado
+            photoPath          // Caminho da foto
+        ];
+
+        // Executa a query
+        await db.query(query, values);
+
+        res.status(201).json({ message: "Cliente cadastrado com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao cadastrar o cliente:", error);
+        res.status(500).json({ error: "Erro ao cadastrar o cliente." });
+    }
+});
+
+
 // Endpoint para adicionar um pet
 app.post("/api/add-pet", upload.single("photo"), async (req, res) => {
     try {
