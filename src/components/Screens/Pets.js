@@ -8,7 +8,7 @@ const Pets = () => {
 	const navigate = useNavigate();
 
 	const handleAddInfo = () => navigate("/addpet");
-	const handleSearchInfo = () => console.log("Pesquisar pet");
+	const handleSearchInfo = () => navigate("/searchpets");
 	const handleDeleteInfo = () => console.log("Excluir pet");
 	return (
 		<div className="pets-content">

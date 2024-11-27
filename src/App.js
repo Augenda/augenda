@@ -13,6 +13,9 @@ import AddPet from './components/Templates/AddPet';
 import AddCustomer from './components/Templates/AddCustomer';
 import AddService from './components/Templates/AddService';
 import AddAppointment from './components/Templates/AddAppointment';
+import SearchWorkers from './components/Templates/SearchWorkers';
+import SearchCustomers from './components/Templates/SearchCustomers';
+import SearchPets from './components/Templates/SearchPets';
 
 
 function App() {
@@ -32,6 +35,8 @@ function App() {
         <Route path="/addcustomer"  element={<AddCustomer />} />
         <Route path="/addservice"  element={<AddService />} />
         <Route path="/addappointment"  element={<AddAppointment />} />
+        <Route path="/searchcustomers"  element={<SearchCustomers />} />
+        <Route path="/searchpets"  element={<SearchPets />} />
       </Routes>
     </Router>
   );

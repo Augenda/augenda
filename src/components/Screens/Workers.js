@@ -8,7 +8,7 @@ const Workers = () => {
 	const navigate = useNavigate();
 
 	const handleAddInfo = () => navigate("/addworker");
-	const handleSearchInfo = () => console.log("Pesquisar trabalhador");
+	const handleSearchInfo = () => navigate("/searchworkers");
 	const handleDeleteInfo = () => console.log("Excluir trabalhador");
 	return (
 		<div className="workers-content">

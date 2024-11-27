@@ -8,7 +8,7 @@ const Customers = () => {
 	const navigate = useNavigate();
 
 	const handleAddInfo = () => navigate("/addcustomer");
-	const handleSearchInfo = () => console.log("Pesquisar Cliente");
+	const handleSearchInfo = () => navigate("/searchcustomers");
 	const handleDeleteInfo = () => console.log("Excluir Cliente");
 	return (
 		<div className="workers-content">
