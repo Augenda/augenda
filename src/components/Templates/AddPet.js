@@ -20,10 +20,10 @@ const AddPet = () => {
 	useEffect(() => {
 		const fetchClients = async () => {
 			try {
-				const response = await fetch("http://localhost:5000/api/customers"); // Substitua pela rota correta da API
+				const response = await fetch("http://localhost:5000/api/clients"); // Substitua pela URL correta
 				if (response.ok) {
 					const data = await response.json();
-					setClients(data); // Define os serviços no estado
+					setClients(data); // Define os clientes no estado
 				} else {
 					console.error("Erro ao buscar clientes:", response.statusText);
 				}
@@ -131,14 +131,18 @@ const AddPet = () => {
 						<option value="" disabled>
 							Selecione um cliente
 						</option>
-						{clients.map((client) => (
-							<option key={client.id} value={client.id}>
-								{client.name}
-							</option>
-						))}
+						{clients.length > 0 ? (
+							clients.map((client) => (
+								<option key={client.client_id} value={client.client_id}>
+									{client.name}
+								</option>
+							))
+						) : (
+							<option disabled>Sem clientes disponíveis</option>
+						)}
 					</select>
 				</div>
-
+				
 				{/* Campo Cliente */}
 				{/* <div>
 					<label htmlFor="idclient">Dono(Cliente):</label>

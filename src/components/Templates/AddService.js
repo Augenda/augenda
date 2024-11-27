@@ -36,28 +36,37 @@ const AddService = () => {
 		}
 	};
 
-	// Função para lidar com o envio do formulário
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-
-		// Converte o preço para formato numérico antes de enviar
-		const formDataToSend = new FormData();
-		for (let key in formData) {
-			if (key === "price") {
-				// Remove "R$" e converte para número
-				formDataToSend.append(
-					key,
-					formData[key].replace("R$", "").replace(",", ".")
-				);
+	
+		// Remove "R$" do preço antes de enviar
+		const sanitizedPrice = formData.price.replace("R$", "").replace(",", ".");
+	
+		const payload = {
+			...formData,
+			price: sanitizedPrice, // Garante que o preço está em formato numérico
+		};
+	
+		try {
+			const response = await fetch("http://localhost:5000/api/add-service", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
+	
+			if (response.ok) {
+				const data = await response.json();
+				alert("Serviço cadastrado com sucesso!");
+				navigate("/services"); // Redireciona para a lista de serviços
 			} else {
-				formDataToSend.append(key, formData[key]);
+				alert("Erro ao cadastrar o serviço.");
 			}
+		} catch (error) {
+			console.error("Erro na requisição:", error);
+			alert("Erro ao cadastrar o serviço.");
 		}
-
-		console.log(
-			"Dados a serem enviados:",
-			Object.fromEntries(formDataToSend.entries())
-		);
 	};
 
 	return (

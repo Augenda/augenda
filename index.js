@@ -121,6 +121,45 @@ app.post("/api/add-customer", upload.single("photo"), async (req, res) => {
     }
 });
 
+// Rota para adicionar um serviço
+app.post("/api/add-service", async (req, res) => {
+    try {
+        const { description, price, status } = req.body;
+
+        // Insere os dados no banco
+        const query = `
+            INSERT INTO services (description, price, status)
+            VALUES (?, ?, ?)
+        `;
+
+        const values = [description, parseFloat(price), status]; // Certifique-se de que `price` é numérico
+        await db.query(query, values);
+
+        res.status(201).json({ message: "Serviço criado com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao adicionar o serviço:", error);
+        res.status(500).json({ error: "Erro ao adicionar o serviço." });
+    }
+});
+
+app.post("/api/add-appointment", async (req, res) => {
+    try {
+        const { employee, service, pet, dt_ini, dt_prev, dt_complete } = req.body;
+
+        const query = `
+            INSERT INTO appointment (employee, service, pet, dt_ini, dt_prev, dt_complete)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [employee, service, pet, dt_ini, dt_prev, dt_complete];
+        await db.query(query, values);
+
+        res.status(201).json({ message: "Agendamento criado com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao criar agendamento:", error);
+        res.status(500).json({ error: "Erro ao criar agendamento." });
+    }
+});
 
 // Endpoint para adicionar um pet
 app.post("/api/add-pet", upload.single("photo"), async (req, res) => {
@@ -185,6 +224,52 @@ app.post('/api/login', async (req, res) => {
     } catch (err) {
         console.error('Erro no servidor:', err);
         res.status(500).json({ error: 'Erro no servidor' });
+    }
+});
+
+//ROTAS PARA BUSCAR INFORMAÇÕES!!!!!
+
+app.get("/api/users", async (req, res) => {
+    try {
+        const query = "SELECT user_id, name FROM user";
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Erro ao buscar funcionários:", error);
+        res.status(500).json({ error: "Erro ao buscar funcionários." });
+    }
+});
+
+app.get("/api/services", async (req, res) => {
+    try {
+        const query = "SELECT service_id, description FROM services";
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Erro ao buscar serviços:", error);
+        res.status(500).json({ error: "Erro ao buscar serviços." });
+    }
+});
+
+app.get("/api/pets", async (req, res) => {
+    try {
+        const query = "SELECT pet_id, name FROM pet";
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Erro ao buscar pets:", error);
+        res.status(500).json({ error: "Erro ao buscar pets." });
+    }
+});
+
+app.get("/api/clients", async (req, res) => {
+    try {
+        const query = "SELECT client_id, name FROM client"; 
+        const [rows] = await db.query(query);
+        res.status(200).json(rows); // Envia a resposta com os dados encontrados
+    } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+        res.status(500).json({ error: "Erro ao buscar clientes." });
     }
 });
 

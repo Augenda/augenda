@@ -15,7 +15,7 @@ const AddAppointment = () => {
 
 	// Estados
 	const [formData, setFormData] = useState({
-		worker: "",
+		employee: "",
 		service: "",
 		pet: "",
 		dt_ini: null,
@@ -47,7 +47,7 @@ const AddAppointment = () => {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
-				const response = await fetch("http://localhost:5000/api/workers"); // Substitua pela rota correta da API
+				const response = await fetch("http://localhost:5000/api/users"); // Substitua pela rota correta da API
 				if (response.ok) {
 					const data = await response.json();
 					setUsers(data); // Define os serviços no estado
@@ -95,36 +95,34 @@ const AddAppointment = () => {
         });
       };      
 
-	// Enviar dados do formulário
-	const handleSubmit = async (event) => {
+	// Envio do formulário
+    const handleSubmit = async (event) => {
 		event.preventDefault();
-
-		const formDataToSend = new FormData();
-		for (let key in formData) {
-			formDataToSend.append(key, formData[key]);
-		}
-
+		console.log("Dados enviados:", formData); // Debug
+	
 		try {
-			const response = await fetch(
-				"http://localhost:5000/api/add-appointment",
-				{
-					method: "POST",
-					body: formDataToSend,
-				}
-			);
-
-			const data = await response.json();
+			const response = await fetch("http://localhost:5000/api/add-appointment", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+	
+			const responseData = await response.json();
+			console.log("Resposta do servidor:", responseData); // Inspecione a resposta
+	
 			if (response.ok) {
-				alert("Agendamento adicionado com sucesso!");
+				alert("Agendamento criado com sucesso!");
 				navigate("/appointments");
 			} else {
-				alert(data.error || "Erro ao adicionar agendamento.");
+				alert(`Erro ao criar agendamento: ${responseData.error}`);
 			}
 		} catch (error) {
-			console.error("Erro ao enviar dados:", error);
-			alert("Erro ao conectar ao servidor.");
+			console.error("Erro ao enviar o formulário:", error);
 		}
 	};
+	
 
 	return (
 		<div className="add-content">
@@ -136,11 +134,11 @@ const AddAppointment = () => {
 			<form onSubmit={handleSubmit} encType="multipart/form-data">
 				{/* Campo Funcionário */}
 				<div>
-					<label htmlFor="worker">Funcionário:</label>
+					<label htmlFor="employee">Funcionário:</label>
 					<select
-						id="worker"
-						name="worker"
-						value={formData.worker}
+						id="employee"
+						name="employee"
+						value={formData.employee}
 						onChange={handleChange}
 						required
 					>
@@ -170,7 +168,7 @@ const AddAppointment = () => {
 						</option>
 						{services.map((service) => (
 							<option key={service.id} value={service.id}>
-								{service.name}
+								{service.description}
 							</option>
 						))}
 					</select>
