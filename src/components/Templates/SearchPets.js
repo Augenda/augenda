@@ -3,42 +3,46 @@ import Search from "../Templates/Search";
 import Header from "./Header";
 
 const SearchPets = () => {
-	const [pets, setPets] = useState([]);
+  const [pets, setPets] = useState([]);
 
-	useEffect(() => {
-		// Fazendo a requisição para buscar os dados
-		fetch("http://localhost:5000/api/pets")
-			.then((response) => response.json())
-			.then((data) => setPets(data))
-			.catch((error) => console.error("Erro ao carregar pets:", error));
-	}, []);
+  useEffect(() => {
+    // Fazendo a requisição para buscar os dados
+    fetch("http://localhost:5000/api/pets_photos") // Atualize o endpoint para incluir o nome do cliente, se necessário
+      .then((response) => response.json())
+      .then((data) => {
+        // Ordena os pets por ID antes de salvar no estado
+        const sortedPets = data.sort((a, b) => a.id - b.id);
+        setPets(sortedPets);
+      })
+      .catch((error) => console.error("Erro ao carregar pets:", error));
+  }, []);
 
-	return (
-	<div className="search-pets">
-		<Header />
-		<Search
-			title="PETS"
-			data={pets}
-			keyExtractor={(pet) => pet.id} // Usar o campo de ID como chave
-			renderItem={(pet) => (
-				<div className="pet-item">
-					<img
-						src={pet.photo} // Certifique-se de que a URL da foto esteja no formato correto
-						alt={`Foto de ${pet.name}`}
-						style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-					/>
-					<div>
-						<strong>{pet.name}</strong>
-						<p>{pet.breed}</p>
-						<p>{pet.age}</p>
-						<p>{pet.idclient}</p>
-						<p>{pet.type}</p>
-					</div>
-				</div>
-			)}
-		/>
-	</div>
-	);
+  return (
+    <div className="search-pets">
+      <Header />
+      <Search
+        title="PETS"
+        data={pets}
+        keyExtractor={(pet) => pet.id} // Usar o ID como chave única
+        renderItem={(pet) => (
+          <div className="pet-item" key={pet.id}>
+            <img
+              src={pet.photo} // Certifique-se de que a URL da foto está correta no backend
+              alt={`Foto de ${pet.name}`}
+              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+            />
+            <div>
+              <strong>{pet.name}</strong>
+              <p>Raça: {pet.breed}</p>
+              <p>Nome do Dono: {pet.ownerName || "Desconhecido"}</p>
+              <p>ID do Dono: {pet.idclient}</p>
+              <p>Tipo: {pet.type}</p>
+            </div>
+          </div>
+        )}
+      />
+    </div>
+  );
 };
 
 export default SearchPets;

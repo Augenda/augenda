@@ -262,6 +262,91 @@ app.get("/api/pets", async (req, res) => {
     }
 });
 
+app.get("/api/pets_photos", async (req, res) => {
+    try {
+      const query = `
+        SELECT 
+        pet.pet_id AS id, 
+        pet.name AS name, 
+        pet.breed AS breed, 
+        pet.age AS age, 
+        pet.id_client AS idclient, 
+        pet.type AS type, 
+        CONCAT('http://localhost:5000/uploads/', pet.pet_photo) AS photo,
+        client.name AS ownerName
+    FROM pet
+    LEFT JOIN client ON pet.id_client = client.client_id
+      `;
+  
+      const [rows] = await db.query(query);
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error("Erro ao buscar pets com informações do dono:", error);
+      res.status(500).json({ error: "Erro ao buscar pets." });
+    }
+  });
+
+  app.get("/pets/count", async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT COUNT(*) AS count FROM pet");
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.error("Erro ao contar pets:", error);
+        res.status(500).json({ error: "Erro ao contar pets." });
+    }
+});
+
+app.get("/appointments/count", async (req, res) => {
+    const { status } = req.query; // Pode ser "pending" ou "completed"
+    try {
+        const query = `
+            SELECT COUNT(*) AS count 
+            FROM appointment 
+            WHERE status = ?
+        `;
+        const [rows] = await db.query(query, [status]);
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.error("Erro ao contar agendamentos:", error);
+        res.status(500).json({ error: "Erro ao contar agendamentos." });
+    }
+});
+
+app.get("/employees/top", async (req, res) => {
+    try {
+        const query = `
+            SELECT a.employee AS name, COUNT(*) AS count
+            FROM appointment a
+            GROUP BY a.employee
+            ORDER BY count DESC
+            LIMIT 5
+        `;
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Erro ao buscar funcionários:", error);
+        res.status(500).json({ error: "Erro ao buscar funcionários." });
+    }
+});
+
+app.get("/pets/top", async (req, res) => {
+    try {
+        const query = `
+            SELECT a.pet, COUNT(a.pet) AS count
+            FROM appointment a
+            GROUP BY a.pet
+            ORDER BY count DESC
+            LIMIT 5;
+        `;
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Erro ao buscar pets:", error);
+        res.status(500).json({ error: "Erro ao buscar pets." });
+    }
+});
+
+
 app.get("/api/clients", async (req, res) => {
     try {
         const query = "SELECT client_id, name FROM client"; 
@@ -273,6 +358,53 @@ app.get("/api/clients", async (req, res) => {
     }
 });
 
+app.get("/api/appointments", async (req, res) => {
+    const { status } = req.query; // Pega o status enviado na query string
+  
+    let query = "SELECT * FROM appointment"; // Consulta base
+    let queryParams = [];
+  
+    // Filtra por status
+    if (status === "open") {
+      query += " WHERE status = 'pending'"; // Agendamentos em aberto
+    } else if (status === "completed") {
+      query += " WHERE status = 'completed'"; // Agendamentos concluídos
+    }
+  
+    try {
+      const [result] = await db.query(query, queryParams); // Aqui foi corrigido para usar 'db'
+      console.log(result);  // Adiciona log para inspecionar o resultado
+  
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Nenhum agendamento encontrado." });
+      }
+  
+      return res.json(result); // Retorna os agendamentos encontrados
+    } catch (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+      return res.status(500).json({ message: "Erro ao carregar agendamentos." });
+    }
+});
+
+app.put("/api/appointments/:appointmentId/complete", async (req, res) => {
+    const { appointmentId } = req.params;
+
+    try {
+        // Atualiza o status do agendamento para "completed"
+        const query = `UPDATE appointment SET status = 'completed', dt_complete = NOW() WHERE appointment_id = ? AND status = 'pending'`;
+        const [result] = await db.query(query, [appointmentId]);
+
+        // Verifica se algum agendamento foi atualizado
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Agendamento não encontrado ou já concluído." });
+        }
+
+        res.status(200).json({ message: "Agendamento concluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao atualizar agendamento:", error);
+        res.status(500).json({ error: "Erro ao concluir agendamento." });
+    }
+});
 
 
 const PORT = 5000;

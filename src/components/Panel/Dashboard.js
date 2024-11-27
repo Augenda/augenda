@@ -17,11 +17,11 @@ const Dashboard = () => {
 			try {
 				const [petsRes, pendingRes, completedRes, employeesRes, petsTopRes] =
 					await Promise.all([
-						fetch("/pets/count").then((res) => res.json()),
-						fetch("/appointments/count?status=pending").then((res) => res.json()),
-						fetch("/appointments/count?status=completed").then((res) => res.json()),
-						fetch("/employees/top").then((res) => res.json()),
-						fetch("/pets/top").then((res) => res.json()),
+						fetch("http://localhost:5000/pets/count").then((res) => res.json()),
+						fetch("http://localhost:5000/appointments/count?status=pending").then((res) => res.json()),
+						fetch("http://localhost:5000/appointments/count?status=completed").then((res) => res.json()),
+						fetch("http://localhost:5000/employees/top").then((res) => res.json()),
+						fetch("http://localhost:5000/pets/top").then((res) => res.json()),
 					]);
 
 				setData({
@@ -71,7 +71,7 @@ const Dashboard = () => {
 					<h3>PETS MAIS FREQUENTES</h3>
 					<ol>
 						{data.topPets.map((pet, index) => (
-							<li key={index}>{pet.name}</li>
+							<li key={index}>{pet.pet}</li>
 						))}
 					</ol>
 				</div>
