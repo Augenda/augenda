@@ -1,0 +1,71 @@
+.search-appointments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .subtitle{
+    color: white;
+  }
+  
+  .appointments-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px; /* Ajuste o valor conforme necessário */
+    gap: 20px; /* Espaçamento entre as colunas */
+  }
+  
+  .appointments-column {
+    width: 48%; /* Cada coluna ocupa quase metade da largura da tela */
+    background-color: #4a90d6;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .appointments-column h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .appointment-item {
+    background-color: #2d659c;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .appointment-item strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .appointment-item p {
+    margin: 5px 0;
+  }
+  
+  button {
+    background-color: chocolate;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: #d67f2d;
+  }
+  

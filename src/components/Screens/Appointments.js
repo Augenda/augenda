@@ -8,7 +8,7 @@ const Appointments = () => {
 	const navigate = useNavigate();
 
 	const handleAddInfo = () => navigate("/addappointment");
-	const handleSearchInfo = () => console.log("Pesquisar Agendamento");
+	const handleSearchInfo = () => navigate("/searchappointments");
 	const handleDeleteInfo = () => console.log("Excluir Agendamento");
 	return (
 		<div className="appointments-content">
