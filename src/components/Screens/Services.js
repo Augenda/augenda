@@ -8,7 +8,7 @@ const Services = () => {
 	const navigate = useNavigate();
 
 	const handleAddInfo = () => navigate("/addservice");
-	const handleSearchInfo = () => console.log("Pesquisar serviço");
+	const handleSearchInfo = () => navigate("/searchservices");
 	const handleDeleteInfo = () => console.log("Excluir serviço");
 	return (
 		<div className="services-content">

@@ -17,6 +17,7 @@ import SearchWorkers from './components/Templates/SearchWorkers';
 import SearchCustomers from './components/Templates/SearchCustomers';
 import SearchPets from './components/Templates/SearchPets';
 import SearchAppointments from './components/Templates/SearchAppointments';
+import SearchServices from './components/Templates/SearchServices';
 
 
 function App() {
@@ -37,8 +38,10 @@ function App() {
         <Route path="/addservice"  element={<AddService />} />
         <Route path="/addappointment"  element={<AddAppointment />} />
         <Route path="/searchcustomers"  element={<SearchCustomers />} />
+        <Route path="/searchworkers"  element={<SearchWorkers />} />
         <Route path="/searchpets"  element={<SearchPets />} />
         <Route path="/searchappointments"  element={<SearchAppointments />} />
+        <Route path="/searchservices"  element={<SearchServices />} />
       </Routes>
     </Router>
   );

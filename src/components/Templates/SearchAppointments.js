@@ -73,8 +73,8 @@ useEffect(() => {
             {openAppointments.map((appointment) => (
               <div key={appointment.appointment_id} className="appointment-item">
                 <div className="container-appointment">
-                  <strong>{appointment.employee_name}</strong>
-                  <p>{appointment.service_description}</p>
+                  <strong>{appointment.employee}</strong>
+                  <p>{appointment.service}</p>
                   <p>{appointment.pet}</p>
                   <p>{appointment.dt_ini}</p>
                   <p>{appointment.dt_prev}</p>

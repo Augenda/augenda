@@ -240,6 +240,24 @@ app.get("/api/users", async (req, res) => {
     }
 });
 
+app.get("/api/users_photos", async (req, res) => {
+    try {
+      const query = `
+        SELECT 
+        user.user_id AS id, 
+        user.name AS name, 
+        CONCAT('http://localhost:5000/', user.profile_image) AS photo
+    FROM user
+      `;
+  
+      const [rows] = await db.query(query);
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error("Erro ao buscar pets com informações do dono:", error);
+      res.status(500).json({ error: "Erro ao buscar pets." });
+    }
+  });
+
 app.get("/api/services", async (req, res) => {
     try {
         const query = "SELECT service_id, description FROM services";
@@ -349,7 +367,7 @@ app.get("/pets/top", async (req, res) => {
 
 app.get("/api/clients", async (req, res) => {
     try {
-        const query = "SELECT client_id, name FROM client"; 
+        const query = "SELECT client_id, name, phone, status, address FROM client"; 
         const [rows] = await db.query(query);
         res.status(200).json(rows); // Envia a resposta com os dados encontrados
     } catch (error) {

@@ -7,7 +7,7 @@ const SearchWorkers = () => {
 
 	useEffect(() => {
 		// Fazendo a requisição para buscar os dados
-		fetch("http://localhost:5000/api/workers")
+		fetch("http://localhost:5000/api/users_photos")
 			.then((response) => response.json())
 			.then((data) => setWorkers(data))
 			.catch((error) => console.error("Erro ao carregar funcionários:", error));
@@ -23,7 +23,7 @@ const SearchWorkers = () => {
 			renderItem={(worker) => (
 				<div className="worker-item">
 					<img
-						src={worker.photo} // Certifique-se de que a URL da foto esteja no formato correto
+						src={worker.profile_image} // Certifique-se de que a URL da foto esteja no formato correto
 						alt={`Foto de ${worker.name}`}
 						style={{ width: "50px", height: "50px", borderRadius: "50%" }}
 					/>
