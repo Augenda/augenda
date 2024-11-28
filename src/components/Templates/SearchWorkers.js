@@ -24,8 +24,9 @@ const SearchWorkers = () => {
 			keyExtractor={(worker) => worker.id} // Usar o campo de ID como chave
 			renderItem={(worker) => (
 				<div className="worker-card">
+					
 					<img
-						src={worker.profile_image} // Certifique-se de que a URL da foto esteja no formato correto
+						src={worker.photo} // Certifique-se de que a URL da foto esteja no formato correto
 						alt={`Foto de ${worker.name}`}
 						style={{ width: "100px", height: "100px", borderRadius: "50%" }}
 					/>

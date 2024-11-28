@@ -39,10 +39,10 @@ const Header = () => {
               <div className="profile">
                   {profileImage ? (
                       <img
-                          src={profileImage ? `http://localhost:5000/${profileImage.replace(/^\/?uploads\//, '')}` : 'default-avatar.png'}
-                          alt="Foto de Perfil"
-                          className="profile-pic"
-                      />
+                      src={`${profileImage}`}
+                      alt="Foto de Perfil"
+                      className="profile-pic"
+                  />
                   ) : (
                       <img
                           src={require("../../assets/Profile.jpg")}

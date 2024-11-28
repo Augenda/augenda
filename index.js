@@ -53,7 +53,7 @@ const upload = multer({ storage });
 
 // Rota para adicionar funcionário
 app.post("/api/add-worker", upload.single("photo"), (req, res) => {
-    const { name, username, password, role } = req.body;
+    const { name, username, password, role, status } = req.body;
     const photoPath = req.file ? req.file.path : null;  // Caminho correto
 
     // Criptografar a senha antes de salvar no banco
@@ -62,8 +62,8 @@ app.post("/api/add-worker", upload.single("photo"), (req, res) => {
             return res.status(500).json({ error: "Erro ao criptografar a senha" });
         }
 
-        const sql = "INSERT INTO User (name, username, password, role, profile_image) VALUES (?, ?, ?, ?, ?)";
-        db.query(sql, [name, username, hashedPassword, role, photoPath], (err, result) => {
+        const sql = "INSERT INTO User (name, username, password, role, status, profile_image) VALUES (?, ?, ?, ?, ?, ?)";
+        db.query(sql, [name, username, hashedPassword, role, status, photoPath], (err, result) => {
             if (err) {
                 console.error("Erro ao salvar no banco:", err);
                 return res.status(500).json({ error: "Erro ao adicionar funcionário" });
@@ -142,6 +142,41 @@ app.post("/api/add-service", async (req, res) => {
     }
 });
 
+// Rota para editar um serviço
+app.put("/api/services/:id", (req, res) => {
+    const { id } = req.params;
+    const { description, price, status } = req.body;
+  
+    // Validação de entrada
+    if (!description || !price || !status) {
+      return res.status(400).json({ error: "Todos os campos são obrigatórios." });
+    }
+  
+    const query = `
+      UPDATE services 
+      SET description = ?, price = ?, status = ? 
+      WHERE service_id = ?
+    `;
+    const values = [description, price, status, id];
+  
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Erro ao atualizar serviço:", err);
+        return res.status(500).json({ error: "Erro ao atualizar serviço." });
+      }
+  
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "Serviço não encontrado." });
+      }
+  
+      res.json({
+        message: "Serviço atualizado com sucesso.",
+        service: { id, description, price, status },
+      });
+    });
+  });
+  
+
 app.post("/api/add-appointment", async (req, res) => {
     try {
         const { employee, service, pet, dt_ini, dt_prev, dt_complete } = req.body;
@@ -201,7 +236,7 @@ app.post('/api/login', async (req, res) => {
             // Monta o caminho completo para a imagem de perfil, se existir
             let profileImage = null;
             if (user.profile_image) {
-                profileImage = `/uploads/${user.profile_image}`; // Supondo que o campo profile_image contém apenas o nome do arquivo
+                profileImage = `http://localhost:5000/uploads/${user.profile_image}`; // Supondo que o campo profile_image contém apenas o nome do arquivo
             }
 
             // Gera o token JWT
@@ -231,7 +266,7 @@ app.post('/api/login', async (req, res) => {
 
 app.get("/api/users", async (req, res) => {
     try {
-        const query = "SELECT user_id, name FROM user";
+        const query = "SELECT user_id, name, username, role FROM user";
         const [rows] = await db.query(query);
         res.status(200).json(rows);
     } catch (error) {
@@ -240,13 +275,36 @@ app.get("/api/users", async (req, res) => {
     }
 });
 
+app.get("/api/clients_photos", async (req, res) => {
+    try {
+      const query = `
+        SELECT 
+        client.client_id AS id, 
+        client.name AS name,
+        client.phone AS phone,
+        client.status AS status,
+        client.address AS address,   
+        CONCAT('http://localhost:5000/uploads/', client.client_photo) AS photo
+    FROM client
+      `;
+  
+      const [rows] = await db.query(query);
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error("Erro ao buscar pets com informações do dono:", error);
+      res.status(500).json({ error: "Erro ao buscar pets." });
+    }
+  });
+
 app.get("/api/users_photos", async (req, res) => {
     try {
       const query = `
         SELECT 
         user.user_id AS id, 
-        user.name AS name, 
-        CONCAT('http://localhost:5000/', user.profile_image) AS photo
+        user.name AS name,
+        user.username AS username,
+        user.status AS status, 
+        CONCAT('http://localhost:5000/uploads/', user.profile_image) AS photo
     FROM user
       `;
   
@@ -260,7 +318,7 @@ app.get("/api/users_photos", async (req, res) => {
 
 app.get("/api/services", async (req, res) => {
     try {
-        const query = "SELECT service_id, description FROM services";
+        const query = "SELECT service_id, description, price, status FROM services";
         const [rows] = await db.query(query);
         res.status(200).json(rows);
     } catch (error) {
@@ -367,7 +425,7 @@ app.get("/pets/top", async (req, res) => {
 
 app.get("/api/clients", async (req, res) => {
     try {
-        const query = "SELECT client_id, name, phone, status, address FROM client"; 
+        const query = "SELECT client_id, name, phone, status, address, client_photo FROM client"; 
         const [rows] = await db.query(query);
         res.status(200).json(rows); // Envia a resposta com os dados encontrados
     } catch (error) {

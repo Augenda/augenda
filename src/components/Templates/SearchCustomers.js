@@ -8,7 +8,7 @@ const SearchCustomers = () => {
 
   useEffect(() => {
     // Fazendo a requisição para buscar os dados
-    fetch("http://localhost:5000/api/clients")
+    fetch("http://localhost:5000/api/clients_photos")
       .then((response) => response.json())
       .then((data) => setCustomers(data))
       .catch((error) => console.error("Erro ao carregar clientes:", error));

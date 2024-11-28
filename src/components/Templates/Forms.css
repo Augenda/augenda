@@ -89,3 +89,15 @@ select,
 	padding: 5%;
 	width: 400px;
 }
+
+.modal-actions{
+	margin-left: 50%;
+}
+
+.edit-button{
+	color: white;
+	background-color: #63b5e5;
+	border: none;
+	padding: 1%;
+	border-radius: 5%;
+}

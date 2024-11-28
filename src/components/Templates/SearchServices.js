@@ -40,8 +40,6 @@ const SearchServices = () => {
   //     </div>
   //   </div>
   // );
-
-  const SearchServices = () => {
     const [services, setServices] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentService, setCurrentService] = useState(null);
@@ -54,9 +52,13 @@ const SearchServices = () => {
     }, []);
   
     const handleEdit = (service) => {
+      if (!service.service_id) {
+        console.error("O serviço selecionado não possui um ID:", service);
+        return;
+      }
       setCurrentService(service); // Define o serviço atual para edição
       setIsModalOpen(true); // Abre o modal
-    };
+    }
   
     const handleCloseModal = () => {
       setIsModalOpen(false); // Fecha o modal
@@ -70,21 +72,28 @@ const SearchServices = () => {
   
     const handleSave = () => {
       // Envia as mudanças para o servidor
-      fetch(`http://localhost:5000/api/services/${currentService.id}`, {
+      fetch(`http://localhost:5000/api/services/${currentService.service_id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(currentService),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            return response.text().then((text) => {
+              throw new Error(`Erro na resposta do servidor: ${response.status} - ${text}`);
+            });
+          }
+          return response.json();
+        })
         .then((updatedService) => {
           setServices((prev) =>
             prev.map((service) =>
-              service.id === updatedService.id ? updatedService : service
+              service.service_id === updatedService.service_id ? updatedService : service
             )
-          ); // Atualiza a lista de serviços com o serviço editado
-          handleCloseModal(); // Fecha o modal
+          );
+          handleCloseModal();
         })
         .catch((error) => console.error("Erro ao salvar serviço:", error));
     };
@@ -97,12 +106,12 @@ const SearchServices = () => {
             <Search
               title="PESQUISAR POR SERVIÇOS"
               data={services}
-              keyExtractor={(service) => service.id}
+              keyExtractor={(service) => service.service_id}
               renderItem={(service) => (
                 <div className="service-item">
                   <div>
                     <strong>{service.description}</strong>
-                    <p>{service.price}</p>
+                    <p>R$ {service.price}</p>
                     <p>{service.status}</p>
                   </div>
                   <button
@@ -152,7 +161,7 @@ const SearchServices = () => {
                 </label>
               </form>
               <div className="modal-actions">
-                <button onClick={handleSave}>Salvar</button>
+                <button className="edit-button" onClick={handleSave}>Salvar</button>
                 <button onClick={handleCloseModal}>Cancelar</button>
               </div>
             </div>
@@ -161,7 +170,5 @@ const SearchServices = () => {
       </div>
     );
   };  
-};
-
 export default SearchServices;
 
