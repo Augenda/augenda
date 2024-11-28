@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Search from "../Templates/Search";
 import Header from "./Header";
+import './SearchPets.css'
 
 const SearchPets = () => {
   const [pets, setPets] = useState([]);
@@ -20,27 +21,31 @@ const SearchPets = () => {
   return (
     <div className="search-pets">
       <Header />
-      <Search
-        title="PETS"
-        data={pets}
-        keyExtractor={(pet) => pet.id} // Usar o ID como chave única
-        renderItem={(pet) => (
-          <div className="pet-item" key={pet.id}>
-            <img
-              src={pet.photo} // Certifique-se de que a URL da foto está correta no backend
-              alt={`Foto de ${pet.name}`}
-              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-            />
-            <div>
-              <strong>{pet.name}</strong>
-              <p>Raça: {pet.breed}</p>
-              <p>Nome do Dono: {pet.ownerName || "Desconhecido"}</p>
-              <p>ID do Dono: {pet.idclient}</p>
-              <p>Tipo: {pet.type}</p>
+      <div className="search-column">
+        <Search
+          title="PESQUISAR POR PETS"
+          data={pets}
+          keyExtractor={(pet) => pet.id} // Usar o ID como chave única
+          renderItem={(pet) => (
+            <div className="pet-item" key={pet.id}>
+              <div className="pet-card">
+                <img
+                  src={pet.photo} // Certifique-se de que a URL da foto está correta no backend
+                  alt={`Foto de ${pet.name}`}
+                  style={{ width: "100px", height: "100px", borderRadius: "50%" }}
+                />
+                <div className="pet-info">
+                  <strong>{pet.name}</strong>
+                  <p>Raça: {pet.breed}</p>
+                  <p>Nome do Dono: {pet.ownerName || "Desconhecido"}</p>
+                  <p>Idade: {pet.age}</p>
+                  <p>Tipo: {pet.type}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      />
+          )}
+        />
+      </div>
     </div>
   );
 };
@@ -57,6 +62,3 @@ export default SearchPets;
 //		"id.client": "1" (se conseguir exibir o nome do cliente)
 // 		"photo": "http://localhost:5000/uploads/joao.jpg"
 // 	},
-
-
-

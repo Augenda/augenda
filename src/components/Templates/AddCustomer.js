@@ -120,11 +120,11 @@ const AddCustomer = () => {
 
 	return (
 		<div className="add-content">
-			<button className="form-buttons" onClick={handleGoback}>
+			<button className="goback-button" onClick={handleGoback}>
 				<img src={require("../../assets/But_LogOut.png")} alt="But_Goback" />
 				<p>VOLTAR</p>
 			</button>
-			<h2 className="title">Registro de cliente</h2>
+			<h2 className="title">REGISTRO DE CLIENTE</h2>
 			<form onSubmit={handleSubmit} encType="multipart/form-data">
 				{/* Campo Nome */}
 				<div>
@@ -285,7 +285,7 @@ const AddCustomer = () => {
 
 				{/* Botão de Enviar */}
 				<div>
-					<button type="submit">GRAVAR</button>
+					<button className="save-button" type="submit">GRAVAR</button>
 				</div>
 			</form>
 		</div>

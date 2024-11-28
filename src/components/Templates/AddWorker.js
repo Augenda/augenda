@@ -10,7 +10,8 @@ const AddWorker = () => {
 		name: "",
 		username: "",
 		password: "",
-		role: "user", // Valor padrão
+		role: "Usuario", // Valor padrão
+		status: "Ativo"
 	});
 	const [photo, setPhoto] = useState(null); // Estado para armazenar a foto
 
@@ -67,11 +68,11 @@ const AddWorker = () => {
 	return (
 		
 		<div className="add-content">
-			<button className="form-buttons" onClick={handleGoback}>
+			<button className="goback-button" onClick={handleGoback}>
 				<img src={require("../../assets/But_LogOut.png")} alt="But_Goback" />
 				<p>VOLTAR</p>
 			</button>
-			<h2 className="title">Registro de Funcionário</h2>
+			<h2 className="title">REGISTRO DE FUNCIONÁRIO</h2>
 			<form onSubmit={handleSubmit} encType="multipart/form-data">
 				{/* Campo Nome */}
 				<div>
@@ -122,8 +123,23 @@ const AddWorker = () => {
 						onChange={handleChange}
 						required
 					>
-						<option value="admin">ADMINISTRADOR</option>
-						<option value="user">USUÁRIO</option>
+						<option value="Administrador">ADMINISTRADOR</option>
+						<option value="Usuario">USUÁRIO</option>
+					</select>
+				</div>
+
+				{/* Campo Status */}
+				<div>
+					<label htmlFor="status">Status:</label>
+					<select
+						id="status"
+						name="status"
+						value={formData.status}
+						onChange={handleChange}
+						required
+					>
+						<option value="Ativo">ATIVO</option>
+						<option value="Inativo">INATIVO</option>
 					</select>
 				</div>
 
@@ -151,7 +167,7 @@ const AddWorker = () => {
 
 				{/* Botão de Enviar */}
 				<div>
-					<button type="submit">GRAVAR</button>
+					<button className="save-button" type="submit">GRAVAR</button>
 				</div>
 			</form>
 		</div>

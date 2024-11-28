@@ -1,0 +1,51 @@
+.worker-item {
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .worker-card {
+    display: flex;
+    min-width: 50%;
+    max-width: 100%;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: chocolate;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 2%;
+  }
+
+  .pet-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .worker-photo {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+  }
+  
+  .worker-info {
+    text-align: left;
+  }
+  
+  .worker-info strong {
+    text-align: center;
+    display: block;
+    font-size: 18px;
+    color: white;
+    margin-bottom: 8px;
+  }
+  
+  .worker-info p {
+    margin-left: 5%;
+    color: white;
+    font-size: 14px;
+  }
+  

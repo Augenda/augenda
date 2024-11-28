@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Search from "../Templates/Search";
+import './SearchWorkers.css';
 
 const SearchWorkers = () => {
 	const [workers, setWorkers] = useState([]);
@@ -16,24 +17,27 @@ const SearchWorkers = () => {
 	return (
 	<div className="search-workers">
 		<Header />
+		<div className="search-column">
 		<Search
-			title="FUNCIONÁRIOS"
+			title="PESQUISAR POR FUNCIONÁRIOS"
 			data={workers}
 			keyExtractor={(worker) => worker.id} // Usar o campo de ID como chave
 			renderItem={(worker) => (
-				<div className="worker-item">
+				<div className="worker-card">
 					<img
 						src={worker.profile_image} // Certifique-se de que a URL da foto esteja no formato correto
 						alt={`Foto de ${worker.name}`}
-						style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+						style={{ width: "100px", height: "100px", borderRadius: "50%" }}
 					/>
-					<div>
-						<strong>{worker.name}</strong>
-						<p>{worker.username}</p>
+					<div className="worker-info">
+						<strong>Nome: {worker.name}</strong>
+						<p>Usuário: {worker.username}</p>
+						<p>Status: {worker.status}</p>
 					</div>
 				</div>
 			)}
 		/>
+	 </div>
 	</div>
 	);
 };

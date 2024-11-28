@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './AddService.css';
 
 const AddService = () => {
 	const navigate = useNavigate();
@@ -71,12 +72,12 @@ const AddService = () => {
 
 	return (
 		<div className="add-content">
-			<button className="form-buttons" onClick={handleGoback}>
+			<button className="goback-button" onClick={handleGoback}>
 				<img src={require("../../assets/But_LogOut.png")} alt="But_Goback" />
 				<p>VOLTAR</p>
 			</button>
-			<h2 className="title">Registro de Serviço</h2>
-			<form onSubmit={handleSubmit} encType="multipart/form-data">
+			<h2 className="title">REGISTRO DE SERVIÇO</h2>
+			<form className="form-addservice" onSubmit={handleSubmit} encType="multipart/form-data">
 				{/* Campo Descrição */}
 				<div>
 					<label htmlFor="description">Descrição:</label>
@@ -119,7 +120,7 @@ const AddService = () => {
 
 				{/* Botão de Enviar */}
 				<div>
-					<button type="submit">GRAVAR</button>
+					<button className="save-button" type="submit">GRAVAR</button>
 				</div>
 			</form>
 		</div>

@@ -87,11 +87,11 @@ const AddPet = () => {
 	return (
 		
 		<div className="add-content">
-			<button className="form-buttons" onClick={handleGoback}>
+			<button className="goback-button" onClick={handleGoback}>
 				<img src={require("../../assets/But_LogOut.png")} alt="But_Goback" />
 				<p>VOLTAR</p>
 			</button>
-			<h2 className="title">Registro de Pet</h2>
+			<h2 className="title">REGISTRO DE PET</h2>
 			<form onSubmit={handleSubmit} encType="multipart/form-data">
 				{/* Campo Nome */}
 				<div>
@@ -167,13 +167,13 @@ const AddPet = () => {
 						onChange={handleChange}
 						required
 					>
-						<option value="menos">MENOS QUE 4 MESES</option>
+						<option value="Menos">MENOS QUE 4 MESES</option>
 						<option value="4 a 6 meses">4 - 6 MESES</option>
 						<option value="7 a 12 meses">7 a 12 MESES</option>
 						<option value="1 a 2 anos">1 a 2 ANOS</option>
 						<option value="3 a 4 anos">3 a 4 ANOS</option>
 						<option value="5 a 6 anos">5 a 6 ANOS</option>
-						<option value="mais">MAIS QUE 6 ANOS</option>
+						<option value="Mais">MAIS QUE 6 ANOS</option>
 					</select>
 				</div>
 
@@ -187,8 +187,8 @@ const AddPet = () => {
 						onChange={handleChange}
 						required
 					>
-						<option value="dog">CACHORRO</option>
-						<option value="cat">GATO</option>
+						<option value="Cachorro">CACHORRO</option>
+						<option value="Gato">GATO</option>
 					</select>
 				</div>
 
@@ -216,7 +216,7 @@ const AddPet = () => {
 
 				{/* Botão de Enviar */}
 				<div>
-					<button type="submit">GRAVAR</button>
+					<button className= "save-button" type="submit">GRAVAR</button>
 				</div>
 			</form>
 		</div>
