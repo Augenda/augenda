@@ -462,7 +462,7 @@ app.get("/api/appointments", async (req, res) => {
     }
 });
 
-app.put("/api/appointments/:appointmentId/complete", async (req, res) => {
+app.put("/api/appointments/:appointmentId", async (req, res) => {
     const { appointmentId } = req.params;
 
     try {
