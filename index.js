@@ -37,16 +37,15 @@ const db = mysql.createPool({
 // Configura a pasta 'uploads' como estática
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Configuração do multer para salvar arquivos localmente
+// Configuração do Multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Diretório onde as imagens serão salvas
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname); // Obtém a extensão do arquivo
-        const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${ext}`; // Nome único com timestamp
-        cb(null, fileName); // Define o nome do arquivo gerado
-      }
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + path.extname(file.originalname)); // Apenas o nome do arquivo
+    },
 });
 
 const upload = multer({ storage });
@@ -54,7 +53,7 @@ const upload = multer({ storage });
 // Rota para adicionar funcionário
 app.post("/api/add-worker", upload.single("photo"), (req, res) => {
     const { name, username, password, role, status } = req.body;
-    const photoPath = req.file ? req.file.path : null;  // Caminho correto
+    const photoPath = req.file ? req.file.filename : null;  // Caminho correto
 
     // Criptografar a senha antes de salvar no banco
     bcrypt.hash(password, 10, (err, hashedPassword) => {
@@ -462,6 +461,7 @@ app.get("/api/appointments", async (req, res) => {
     }
 });
 
+//ATUALIZAR AGENDAMENTO EM ABERTO
 app.put("/api/appointments/:appointmentId", async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -481,6 +481,104 @@ app.put("/api/appointments/:appointmentId", async (req, res) => {
         res.status(500).json({ error: "Erro ao concluir agendamento." });
     }
 });
+
+//EXLUSÃO DE AGENDAMENTOS
+app.delete("/api/appointments_delete/:appointmentId", async (req, res) => {
+    const { appointmentId } = req.params; // Captura o ID do agendamento da URL
+
+    try {
+        // Executa a exclusão no banco de dados
+        const query = `DELETE FROM appointment WHERE appointment_id = ?`;
+        const [result] = await db.query(query, [appointmentId]);
+
+        // Verifica se algum registro foi excluído
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Agendamento não encontrado." });
+        }
+
+        res.status(200).json({ message: "Agendamento excluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao excluir agendamento:", error);
+        res.status(500).json({ error: "Erro ao excluir agendamento." });
+    }
+});
+
+//EXLUSÃO DE CLIENTES
+app.delete("/api/clients/:clientId", async (req, res) => {
+    const { clientId } = req.params;
+
+    try {
+        const query = `DELETE FROM client WHERE client_id = ?`;
+        const [result] = await db.query(query, [clientId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Cliente não encontrado." });
+        }
+
+        res.status(200).json({ message: "Cliente excluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao excluir cliente:", error);
+        res.status(500).json({ error: "Erro ao excluir cliente." });
+    }
+});
+
+//EXLUSÃO DE SERVIÇOS
+app.delete("/api/services/:serviceId", async (req, res) => {
+    const { serviceId } = req.params;
+
+    try {
+        const query = `DELETE FROM services WHERE service_id = ?`;
+        const [result] = await db.query(query, [serviceId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Serviço não encontrado." });
+        }
+
+        res.status(200).json({ message: "Serviço excluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao excluir serviço:", error);
+        res.status(500).json({ error: "Erro ao excluir serviço." });
+    }
+});
+
+//EXCLUSÃO DE PETS
+app.delete("/api/pets/:petId", async (req, res) => {
+    const { petId } = req.params;
+
+    try {
+        const query = `DELETE FROM pet WHERE pet_id = ?`;
+        const [result] = await db.query(query, [petId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Pet não encontrado." });
+        }
+
+        res.status(200).json({ message: "Pet excluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao excluir pet:", error);
+        res.status(500).json({ error: "Erro ao excluir pet." });
+    }
+});
+
+//EXCLUSÃO DE FUNCIONÁRIOS
+app.delete("/api/users_delete/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const query = `DELETE FROM user WHERE user_id = ?`;
+        const [result] = await db.query(query, [userId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Funcionário não encontrado." });
+        }
+
+        res.status(200).json({ message: "Funcionário excluído com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao excluir funcionário:", error);
+        res.status(500).json({ error: "Erro ao excluir funcionário." });
+    }
+});
+
 
 
 const PORT = 5000;
