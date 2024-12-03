@@ -7,6 +7,8 @@ const SearchAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [openAppointments, setOpenAppointments] = useState([]);
   const [completedAppointments, setCompletedAppointments] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentAppointment, setCurrentAppointment] = useState(null);
 
   // Função para marcar o agendamento como concluído
   // const markAsCompleted = (id) => {
@@ -92,6 +94,53 @@ const SearchAppointments = () => {
       });
   }, []);
 
+   // Função para abrir o modal de edição
+   const handleEdit = (appointment) => {
+    setCurrentAppointment(appointment);
+    setIsModalOpen(true);
+  };
+
+  // Função para fechar o modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentAppointment(null);
+  };
+
+  // Função para atualizar os campos no modal
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setCurrentAppointment((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Função para salvar as alterações do agendamento
+  const handleSave = () => {
+    fetch(`http://localhost:5000/api/appointments/${currentAppointment.appointment_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(currentAppointment),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao atualizar agendamento");
+        }
+        return response.json();
+      })
+      .then((updatedAppointment) => {
+        // Atualiza o estado local
+        setOpenAppointments((prev) =>
+          prev.map((appt) =>
+            appt.appointment_id === updatedAppointment.appointment_id
+              ? updatedAppointment
+              : appt
+          )
+        );
+        handleCloseModal();
+      })
+      .catch((error) => console.error("Erro ao salvar agendamento:", error));
+  };
+
   return (
     <div>
       <Header />
@@ -111,10 +160,14 @@ const SearchAppointments = () => {
                   <strong>Serviço: {appointment.service}</strong>
                   <p>Funcionário: {appointment.employee}</p>
                   <p>Pet: {appointment.pet}</p>
-                  <p>Clente(Dono): {appointment.client}</p>
-                  <p>Valor: {appointment.service_price}</p>
                   <p>Data de início: {appointment.dt_ini}</p>
                   <p>Data de previsão: {appointment.dt_prev}</p>
+                  <button
+                    className="button-complete"
+                    onClick={() => handleEdit(appointment)}
+                  >
+                    Editar
+                  </button>
                   <button
                     className="button-complete"
                     onClick={() => markAsCompleted(appointment)}
@@ -138,8 +191,6 @@ const SearchAppointments = () => {
                   <strong>Serviço: {appointment.service}</strong>
                   <p>Funcionário: {appointment.employee}</p>
                   <p>Pet: {appointment.pet}</p>
-                  <p>Clente(Dono): {appointment.client}</p>
-                  <p>Valor: {appointment.service_price}</p>
                   <p>Data de início: {appointment.dt_ini}</p>
                   <p>Data de previsão: {appointment.dt_prev}</p>
                   <p>Data de conclusão:{appointment.dt_complete}</p>{" "}
@@ -150,6 +201,75 @@ const SearchAppointments = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Editar Agendamento</h2>
+            <form>
+              <label>
+                Serviço:
+                <input
+                  type="text"
+                  name="service"
+                  value={currentAppointment?.service || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                Funcionário:
+                <input
+                  type="text"
+                  name="employee"
+                  value={currentAppointment?.employee || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                Pet:
+                <input
+                  type="text"
+                  name="pet"
+                  value={currentAppointment?.pet || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                Cliente:
+                <input
+                  type="text"
+                  name="client"
+                  value={currentAppointment?.client || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                Valor:
+                <input
+                  type="text"
+                  name="service_price"
+                  value={currentAppointment?.service_price || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                Data de Previsão:
+                <input
+                  type="date"
+                  name="dt_prev"
+                  value={currentAppointment?.dt_prev || ""}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </form>
+            <div className="modal-actions">
+              <button className="edit-button" onClick={handleSave}>Salvar</button>
+              <button className="cancelEdit-button" onClick={handleCloseModal}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

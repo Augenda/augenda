@@ -13,10 +13,7 @@ const Forms = ({ handleAddInfo, handleSearchInfo, handleDeleteInfo }) => {
 					<img src={require("../../assets/But_Search.png")} alt="Search_Info" />
 					<p>PESQUISAR</p>
 				</button>
-				<button className="form-buttons" onClick={handleDeleteInfo}>
-					<img src={require("../../assets/But_Delete.png")} alt="Delete_Info" />
-					<p>EXCLUIR</p>
-				</button>
+
 			</div>
 		</div>
 	);

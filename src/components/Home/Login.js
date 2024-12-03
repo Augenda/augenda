@@ -96,9 +96,9 @@ function Login() {
 						ENTRAR
 					</button>
 
-					<a className="login-button" href="/dashboard">
+					{/* <a className="login-button" href="/dashboard">
 						ENTRAR
-					</a>
+					</a> */}
 					
 				</form>
 			</div>

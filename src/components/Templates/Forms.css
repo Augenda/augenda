@@ -11,7 +11,7 @@
 
 .form-buttons {
 	border-radius: 5px;
-	outline: none;
+	border: none;
 	background: none;
 	cursor: pointer;
 	display: flex; /* Para alinhar o texto e a imagem dentro do botão */
@@ -98,6 +98,26 @@ select,
 	color: white;
 	background-color: #63b5e5;
 	border: none;
-	padding: 1%;
+	padding: 2%;
 	border-radius: 5%;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.cancelEdit-button{
+    cursor: pointer;
+    border: none;
+    color: white;
+    background-color: red;
+    border-radius: 5%;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .edit-button:hover{
+	transform: scale(1.1);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .cancelEdit-button:hover{
+	transform: scale(1.1);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  }

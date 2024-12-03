@@ -561,25 +561,64 @@ app.delete("/api/pets/:petId", async (req, res) => {
 });
 
 //EXCLUSÃO DE FUNCIONÁRIOS
-app.delete("/api/users_delete/:userId", async (req, res) => {
+app.delete("/api/users/:userId", async (req, res) => {
     const { userId } = req.params;
-
+  
     try {
-        const query = `DELETE FROM user WHERE user_id = ?`;
-        const [result] = await db.query(query, [userId]);
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Funcionário não encontrado." });
-        }
-
-        res.status(200).json({ message: "Funcionário excluído com sucesso!" });
+      // Verifica se o ID é válido
+      if (!userId || isNaN(userId)) {
+        return res.status(400).json({ error: "ID inválido fornecido." });
+      }
+  
+      // Executa o DELETE
+      const query = "DELETE FROM user WHERE user_id = ?";
+      const [result] = await db.query(query, [userId]);
+  
+      // Verifica se algum registro foi excluído
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Usuário não encontrado." });
+      }
+  
+      res.status(200).json({ message: "Usuário excluído com sucesso!" });
     } catch (error) {
-        console.error("Erro ao excluir funcionário:", error);
-        res.status(500).json({ error: "Erro ao excluir funcionário." });
+      console.error("Erro ao excluir usuário:", error);
+      res.status(500).json({ error: "Erro ao excluir usuário." });
     }
-});
+  });
 
-
+  // Rota para editar um pet
+app.put("/api/pets/:petId", (req, res) => {
+    const { id } = req.params;
+    const { name, breed, age, type, pet_photo } = req.body;
+  
+    // Validação de entrada
+    if (!name || !breed || !age || !type || !pet_photo) {
+      return res.status(400).json({ error: "Todos os campos são obrigatórios." });
+    }
+  
+    const query = `
+      UPDATE pet 
+      SET name = ?, breed = ?, age = ?, type = ?, pet_photo = ?
+      WHERE pet_id = ?
+    `;
+    const values = [name, breed, age, type, pet_photo, id];
+  
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Erro ao atualizar pet:", err);
+        return res.status(500).json({ error: "Erro ao atualizar pet." });
+      }
+  
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "Pet não encontrado." });
+      }
+  
+      res.json({
+        message: "Pet atualizado com sucesso.",
+        service: { id, name, breed, age, type, pet_photo },
+      });
+    });
+  });
 
 const PORT = 5000;
 app.listen(PORT, () => {

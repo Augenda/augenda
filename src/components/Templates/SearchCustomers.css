@@ -7,16 +7,19 @@
   
   .customer-card {
     display: flex;
-    min-width: 50%;
-    max-width: 100%;
     align-items: center;
     border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    min-width: 50%;
+    max-width: 100%;
     border-radius: 8px;
     padding: 16px;
     background-color: chocolate;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 15px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 2%;
   }
 
   .customer-card:hover{
@@ -34,7 +37,7 @@
   }
   
   .customer-info {
-    text-align: left;
+    flex: 1; /* Permite que os dados ocupem o espaço disponível */
   }
   
   .customer-info strong {
@@ -48,5 +51,29 @@
     margin: 4px 0;
     color: white;
     font-size: 14px;
+  }
+
+  .edit-customer {
+    margin-right: 2%;
+    border: none;
+    padding: 1%;
+    width: 8%;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .delete-customer {
+    margin-right: 2%;
+    border: none;
+    padding: 1%;
+    width: 8%;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(255, 89, 67);
+  }
+  
+  .delete-customer:hover {
+    background-color: rgb(248, 4, 4);
   }
   

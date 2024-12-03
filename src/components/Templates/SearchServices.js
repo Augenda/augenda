@@ -97,6 +97,41 @@ const SearchServices = () => {
         })
         .catch((error) => console.error("Erro ao salvar serviço:", error));
     };
+
+    // Função para buscar os serviços
+const fetchServices = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/services");
+    const data = await response.json();
+    setServices(data); // Supondo que você use um state para armazenar os serviços
+  } catch (error) {
+    console.error("Erro ao buscar serviços:", error);
+  }
+};
+
+
+    const deleteService = async (serviceId) => {
+      const confirmDelete = window.confirm("Tem certeza que deseja excluir este serviço?");
+      if (!confirmDelete) return;
+    
+      try {
+        const response = await fetch(`http://localhost:5000/api/services/${serviceId}`, {
+          method: "DELETE",
+        });
+    
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        alert(data.message);
+        fetchServices(); // Atualiza a lista de serviços após a exclusão
+      } catch (error) {
+        console.error("Erro ao excluir serviço:", error);
+        alert("Erro ao excluir serviço.");
+      }
+    };
+    
   
     return (
       <div className="search-services">
@@ -120,6 +155,8 @@ const SearchServices = () => {
                   >
                     Editar
                   </button>
+                  <button className="delete-service"
+                   onClick={() => deleteService(service.service_id)}>Excluir</button>
                 </div>
               )}
             />
@@ -130,7 +167,7 @@ const SearchServices = () => {
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Editar Serviço</h2>
+              <h2 className="title">Editar Serviço</h2>
               <form>
                 <label>
                   Descrição:
@@ -162,7 +199,7 @@ const SearchServices = () => {
               </form>
               <div className="modal-actions">
                 <button className="edit-button" onClick={handleSave}>Salvar</button>
-                <button onClick={handleCloseModal}>Cancelar</button>
+                <button className="cancelEdit-button" onClick={handleCloseModal}>Cancelar</button>
               </div>
             </div>
           </div>
